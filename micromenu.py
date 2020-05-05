@@ -41,7 +41,7 @@ class Menu:
         choice = None
         try:
             choice = int(input("Action number: "))
-        except ValueError as err:
+        except ValueError:
             print("Incorrect input, try again.")
             self.input_number()
         return choice
