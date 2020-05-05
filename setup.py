@@ -1,20 +1,23 @@
 import setuptools
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-     name='micromenu',  
-     version='0.9',
-     scripts=['micromenu'] ,
-     author="Andreas Ehrlund",
-     author_email="a.ehrlund@gmail.com",
-     description="A minimalistic command line menu",
-     long_description=long_description,
-   long_description_content_type="text/markdown",
-     url="https://github.com/andli/micromenu",
-     packages=setuptools.find_packages(),
-     classifiers=[
-         "Programming Language :: Python :: 3",
-         "License :: OSI Approved :: MIT License",
-         "Operating System :: OS Independent",
-     ],
- )
+    name='micromenu',
+    version='0.9',
+    author="Andreas Ehrlund",
+    author_email="a.ehrlund@gmail.com",
+    description="A minimalistic command line menu",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/andli/micromenu",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    extras_require={
+        'test': ['coverage'],
+    },
+)
