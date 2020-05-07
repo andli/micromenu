@@ -23,11 +23,14 @@ jobs:
           pip install black || true
       - name: Test with pytest
         run: pytest --cov=micromenu --cov-report xml:coverage.xml tests/
-      - name: Upload coverage
-        env:
-          CODECOV_TOKEN: 54528e5b-54c3-4a73-bf9a-05f04623eb0d
+      - name: Report coverage
         shell: pwsh
         run: coverage report -m
+      - name: Upload coverage
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          file: ./coverage.xml # optional
   build-and-publish:
     needs: build-and-test
     name: Build and publish Python 🐍 distributions 📦 to PyPI
