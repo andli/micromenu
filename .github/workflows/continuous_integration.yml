@@ -1,0 +1,30 @@
+name: CI (pip)
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          # install black if available (Python 3.6 and above)
+          pip install black || true
+      - name: Test with pytest
+        run: pytest --cov=micromenu --cov-report xml:coverage.xml tests/
+      - name: Upload coverage
+        env: 
+          CODECOV_TOKEN: 54528e5b-54c3-4a73-bf9a-05f04623eb0d
+        shell: pwsh
+        run: coverage report -m
