@@ -1,4 +1,6 @@
 import pytest
+from unittest.mock import patch
+from unittest.mock import MagicMock
 from io import StringIO
 
 from micromenu import micromenu
@@ -20,14 +22,33 @@ class TestMenu:
         captured = capsys.readouterr()
         assert captured.out.startswith("╭─── test ")
 
-    def test_show_menu(self, capsys, monkeypatch):
+    def test_invalid_input(self, capsys):
         menu = micromenu.Menu("test", "test1")
         menu.add_function_item("title1", lambda x: len(x), {'x': "testparam"})
-        menu.show()
-
-        with capsys.disabled():
-            #monkeypatch.setattr('sys.stdin', io.StringIO('1'))
-            monkeypatch.setattr('sys.stdin', io.StringIO('0'))
-
-        captured = capsys.readouterr()
         
+        with patch('sys.stdin', StringIO("a\n0")):
+            menu.show()
+        captured = capsys.readouterr()
+        assert "Incorrect input, try again." in captured.out
+    
+    def test_menu_item_out_of_range(self, capsys):
+        menu = micromenu.Menu("test", "test1")
+        menu.add_function_item("title1", lambda x: len(x), {'x': "testparam"})
+        
+        with patch('sys.stdin', StringIO("9\n0")):
+            menu.show()
+        captured = capsys.readouterr()
+        assert "Choose a valid item." in captured.out
+
+    def test_menu_item_function_called(self, capsys):
+        dummy = MagicMock()
+
+        menu = micromenu.Menu("test", "test1")
+        menu.add_function_item("title1", dummy, {'x': "testparam"})
+        
+        with patch('sys.stdin', StringIO("1\n0")):
+            menu.show()
+
+        assert dummy.called
+
+
