@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "0.9.5"
+__version__ = "0.9.6"
 __license__ = "MIT"
 
 import sys
