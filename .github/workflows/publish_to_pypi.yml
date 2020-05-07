@@ -1,4 +1,5 @@
 name: Publish 📦 to PyPI
+on: [push]
 
 jobs:
   build-n-publish:
