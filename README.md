@@ -12,7 +12,13 @@ A minimalistic command line menu for Python, with a title and an optional messag
 Action number:
 ```
 
-## Example
+## Installation
+
+```bash
+python3 -m pip install micromenu
+```
+
+## Example usage
 
 ```python
 import micromenu
