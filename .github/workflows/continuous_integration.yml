@@ -2,7 +2,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  build-and-test:
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
