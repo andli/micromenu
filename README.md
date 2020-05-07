@@ -1,5 +1,7 @@
 # micromenu
 
+![CI and CD](https://github.com/andli/micromenu/workflows/CI%20and%20CD/badge.svg)
+
 A minimalistic command line menu for Python, with a title and an optional message bar. Callable functions are attached to each menu item.
 
 ```terminal

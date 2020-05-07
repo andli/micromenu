@@ -1,2 +1,5 @@
 [run]
-omit = tests/*
+omit = 
+    *__init__*
+    tests/*
+    setup.py
