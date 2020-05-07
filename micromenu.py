@@ -26,9 +26,14 @@ class Menu:
         self.menu_items.append((title, func_ref, kwargs))
 
     def show(self):
+        self.print_menu(self.menu_title, self.message, self.menu_items)
+
         while True:
-            self.print_menu(self.menu_title, self.message, self.menu_items)
-            choice = self.input_number()
+            try:
+                choice = int(input("Action number: "))
+            except ValueError:
+                print("Incorrect input, try again.")
+                continue
 
             if 0 == choice:
                 break
@@ -36,15 +41,9 @@ class Menu:
                 func = self.menu_items[choice - 1][1]
                 kwargs = self.menu_items[choice - 1][2]
                 func(**kwargs)
-
-    def input_number(self):
-        choice = None
-        try:
-            choice = int(input("Action number: "))
-        except ValueError:
-            print("Incorrect input, try again.")
-            self.input_number()
-        return choice
+                break
+            else:
+                print("Choose a valid item.")
 
     def print_menu(self, title, message, menu_items):
         lengths = [len(item[0]) for item in menu_items]
