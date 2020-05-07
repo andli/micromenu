@@ -18,6 +18,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     extras_require={
-        'test': ['coverage'],
+        'dev': [
+            'wheel',
+            'pytest',
+            'pytest-cov'
+        ],
     },
 )
