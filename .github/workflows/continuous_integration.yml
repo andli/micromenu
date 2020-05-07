@@ -3,9 +3,10 @@ on: [push]
 
 jobs:
   build-and-test:
+    name: Test 🔧 and coverage 🧩
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,12 +24,12 @@ jobs:
       - name: Test with pytest
         run: pytest --cov=micromenu --cov-report xml:coverage.xml tests/
       - name: Upload coverage
-        env: 
+        env:
           CODECOV_TOKEN: 54528e5b-54c3-4a73-bf9a-05f04623eb0d
         shell: pwsh
         run: coverage report -m
   build-and-publish:
-    needs: build-and-test 
+    needs: build-and-test
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     runs-on: ubuntu-18.04
     steps:
