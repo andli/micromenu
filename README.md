@@ -1,6 +1,6 @@
 # micromenu
 
-![CI and CD](https://github.com/andli/micromenu/workflows/CI%20and%20CD/badge.svg) [![codecov](https://codecov.io/gh/andli/micromenu/branch/master/graph/badge.svg)](https://codecov.io/gh/andli/micromenu)
+![CI and CD](https://github.com/andli/micromenu/workflows/CI%20and%20CD/badge.svg) [![codecov](https://codecov.io/gh/andli/micromenu/branch/master/graph/badge.svg)](https://codecov.io/gh/andli/micromenu) ![PyPI](https://img.shields.io/pypi/v/micromenu) ![PyPI - Downloads](https://img.shields.io/pypi/dm/micromenu)
 
 A minimalistic command line menu for Python, with a title and an optional message bar. Callable functions are attached to each menu item.
 
