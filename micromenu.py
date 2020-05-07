@@ -58,7 +58,7 @@ class Menu:
             menu_message_right = (menu_width - len(message) + 2) * " " + "│"
             menu_message = f"│ {message} {menu_message_right}"
             print(menu_message)
-            print("╞" + (menu_width +4) * "═" + "╡")
+            print("╞" + (menu_width + 4) * "═" + "╡")
 
         index = 1
         for item in menu_items:
