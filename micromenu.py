@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "0.9.9"
+__version__ = "0.9.9.1"
 __license__ = "MIT"
 
 import sys
@@ -18,7 +18,10 @@ class Menu:
     def __init__(self, menu_title, message=""):
         if not menu_title:
             raise ValueError("Menu title required")
-        
+
+        if not message:
+            message = ""
+
         self.PADDING = PADDING
         self.MIN_WIDTH = MIN_WIDTH
         self.menu_title = menu_title
