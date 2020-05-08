@@ -22,6 +22,13 @@ class TestMenu:
         captured = capsys.readouterr()
         assert captured.out.startswith("╭─── test ")
 
+    def test_inputs(self):
+        with pytest.raises(ValueError) as excinfo:
+            menu = micromenu.Menu("", "")
+
+        menu = micromenu.Menu("test_title", "")
+        assert isinstance(menu, micromenu.Menu)
+
     def test_dynamic_width(self, capsys):
         overflow = 4
 

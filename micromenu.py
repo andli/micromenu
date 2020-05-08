@@ -15,7 +15,10 @@ MIN_WIDTH = 52
 
 class Menu:
 
-    def __init__(self, menu_title, message):
+    def __init__(self, menu_title, message=""):
+        if not menu_title:
+            raise ValueError("Menu title required")
+        
         self.PADDING = PADDING
         self.MIN_WIDTH = MIN_WIDTH
         self.menu_title = menu_title
