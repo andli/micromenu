@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "0.9.7"
+__version__ = "0.9.9"
 __license__ = "MIT"
 
 import sys
@@ -41,6 +41,7 @@ class Menu:
                 func = self.menu_items[choice - 1][1]
                 kwargs = self.menu_items[choice - 1][2]
                 func(**kwargs)
+                self.show()
                 break
             else:
                 print("Choose a valid item.")
