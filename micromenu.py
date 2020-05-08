@@ -47,6 +47,7 @@ class Menu:
 
     def print_menu(self, title, message, menu_items):
         lengths = [len(item[0]) for item in menu_items]
+        lengths.extend([len(message), len(title)])
         menu_width = max(self.PADDING + max(lengths), self.MIN_WIDTH)
         if message:
             menu_width = max(menu_width, len(message))
