@@ -32,6 +32,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           file: ./coverage.xml # optional
+          name: ${{ matrix.os }}, python ${{ matrix.python-version }}
   build-and-publish:
     needs: build-and-test
     name: Build and publish Python 🐍 distributions 📦 to PyPI
