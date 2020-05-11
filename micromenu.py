@@ -14,7 +14,6 @@ MIN_WIDTH = 52
 
 
 class Menu:
-
     def __init__(self, menu_title, message=""):
         if not menu_title:
             raise ValueError("Menu title required")
@@ -70,11 +69,11 @@ class Menu:
 
         index = 1
         for item in menu_items:
-            print("│ {}: {}{}│".format(
-                str(index),
-                item[0],
-                (menu_width - len(item[0])) * " "
-            ))
+            print(
+                "│ {}: {}{}│".format(
+                    str(index), item[0], (menu_width - len(item[0])) * " "
+                )
+            )
             index += 1
         print("│ 0: Exit" + (len(menu_top) - 10) * " " + "│")
         print("╰" + (len(menu_top) - 2) * "─" + "╯")
