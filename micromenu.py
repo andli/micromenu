@@ -48,9 +48,8 @@ class Menu:
                 func(**kwargs)
                 if self.cycle:
                     self.show()
-                    return False
-                else:
-                    return True
+                return False
+
             else:
                 print("Choose a valid item.")
 
