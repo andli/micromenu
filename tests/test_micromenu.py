@@ -104,5 +104,5 @@ class TestMenu:
         menu = micromenu.Menu("test", cycle=False)
         menu.add_function_item("title1", lambda x: print(x), {"x": "done"})
 
-        with patch("sys.stdin", StringIO("1\n0")):
+        with patch("sys.stdin", StringIO("0\n0")):
             assert menu.show() == True
