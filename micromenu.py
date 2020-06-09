@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __license__ = "MIT"
 
 import sys
@@ -40,16 +40,17 @@ class Menu:
                 continue
 
             if 0 == choice:
-                break
+                return True
+                # yield
             elif choice in range(len(self.menu_items) + 1):
                 func = self.menu_items[choice - 1][1]
                 kwargs = self.menu_items[choice - 1][2]
                 func(**kwargs)
                 if self.cycle:
                     self.show()
+                    return False
                 else:
-                    print("Exiting.")
-                    break
+                    return True
             else:
                 print("Choose a valid item.")
 

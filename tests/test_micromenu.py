@@ -105,6 +105,4 @@ class TestMenu:
         menu.add_function_item("title1", lambda x: print(x), {"x": "done"})
 
         with patch("sys.stdin", StringIO("1\n0")):
-            menu.show()
-        captured = capsys.readouterr().out.strip()
-        assert captured.endswith("done\nExiting.")
+            assert menu.show() == True
