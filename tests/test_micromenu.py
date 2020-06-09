@@ -18,9 +18,7 @@ class TestMenu:
     def test_print_menu(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
-        menu.print_menu(
-            menu.menu_title, menu.message_top, menu.message_bottom, menu.menu_items
-        )
+        menu.print_menu()
         captured = capsys.readouterr()
         assert captured.out.startswith("╭─── test ")
 
@@ -37,20 +35,25 @@ class TestMenu:
         # test menu title longest
         menu = micromenu.Menu("X" * (micromenu.MIN_WIDTH + overflow), "x")
         menu.add_function_item("x", lambda x: len(x), {"x": "testparam"})
-        menu.print_menu(
-            menu.menu_title, menu.message_top, menu.message_bottom, menu.menu_items
-        )
+        menu.print_menu()
         captured = capsys.readouterr()
         lines = captured.out.split("\n")
         del lines[-1]
         assert all(len(x) == len(lines[0]) for x in lines)
 
-        # test menu message longest
+        # test top menu message longest
         menu = micromenu.Menu("x", "X" * (micromenu.MIN_WIDTH + overflow))
         menu.add_function_item("x", lambda x: len(x), {"x": "testparam"})
-        menu.print_menu(
-            menu.menu_title, menu.message_top, menu.message_bottom, menu.menu_items
-        )
+        menu.print_menu()
+        captured = capsys.readouterr()
+        lines = captured.out.split("\n")
+        del lines[-1]
+        assert all(len(x) == len(lines[0]) for x in lines)
+
+        # test bottom menu message longest
+        menu = micromenu.Menu("x", "", "X" * (micromenu.MIN_WIDTH + overflow))
+        menu.add_function_item("x", lambda x: len(x), {"x": "testparam"})
+        menu.print_menu()
         captured = capsys.readouterr()
         lines = captured.out.split("\n")
         del lines[-1]
@@ -61,9 +64,7 @@ class TestMenu:
         menu.add_function_item(
             "X" * (micromenu.MIN_WIDTH + overflow), lambda x: len(x), {"x": "testparam"}
         )
-        menu.print_menu(
-            menu.menu_title, menu.message_top, menu.message_bottom, menu.menu_items
-        )
+        menu.print_menu()
         captured = capsys.readouterr()
         lines = captured.out.split("\n")
         del lines[-1]
