@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __license__ = "MIT"
 
 import sys
@@ -14,10 +14,11 @@ MIN_WIDTH = 52
 
 
 class Menu:
-    def __init__(self, menu_title, message_top="", message_bottom=""):
+    def __init__(self, menu_title, message_top="", message_bottom="", cycle=True):
         if not menu_title:
             raise ValueError("Menu title required")
 
+        self.cycle = cycle
         self.PADDING = PADDING
         self.MIN_WIDTH = MIN_WIDTH
         self.menu_title = menu_title
@@ -44,8 +45,11 @@ class Menu:
                 func = self.menu_items[choice - 1][1]
                 kwargs = self.menu_items[choice - 1][2]
                 func(**kwargs)
-                self.show()
-                break
+                if self.cycle:
+                    self.show()
+                else:
+                    print("Exiting.")
+                    break
             else:
                 print("Choose a valid item.")
 

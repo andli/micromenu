@@ -1,4 +1,6 @@
 import pytest
+import mock
+import builtins
 from unittest.mock import patch
 from unittest.mock import MagicMock
 from io import StringIO
@@ -24,7 +26,7 @@ class TestMenu:
 
     def test_inputs(self):
         with pytest.raises(ValueError) as excinfo:
-            menu = micromenu.Menu("", "")
+            menu = micromenu.Menu("")
 
         menu = micromenu.Menu("test_title", "")
         assert isinstance(menu, micromenu.Menu)
@@ -94,7 +96,15 @@ class TestMenu:
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
         menu.add_function_item("title1", dummy, {"x": "testparam"})
 
+        with patch("sys.stdin", StringIO("1\n0\n0")):
+            menu.show()
+            assert dummy.called
+
+    def test_menu_terminates(self, capsys):
+        menu = micromenu.Menu("test", cycle=False)
+        menu.add_function_item("title1", lambda x: print(x), {"x": "done"})
+
         with patch("sys.stdin", StringIO("1\n0")):
             menu.show()
-
-        assert dummy.called
+        captured = capsys.readouterr().out.strip()
+        assert captured.endswith("done\nExiting.")

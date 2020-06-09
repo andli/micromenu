@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="micromenu",
-    version="1.0.1",
+    version="1.0.2",
     py_modules=["micromenu"],
     author="Andreas Ehrlund",
     author_email="a.ehrlund@gmail.com",
@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    extras_require={"dev": ["wheel", "pytest", "pytest-cov"],},
+    extras_require={"dev": ["wheel", "pytest", "mock", "pytest-cov"],},
 )

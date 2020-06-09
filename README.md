@@ -18,6 +18,8 @@ A minimalistic command line menu for Python, with a title and optional message b
 Action number:
 ```
 
+Set the parameter `cycle=False` if the menu should not loop back after an item has been executed.
+
 ## Installation
 
 ```bash
