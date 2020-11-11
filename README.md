@@ -31,7 +31,7 @@ python3 -m pip install micromenu
 ```python
 import micromenu
 
-menu = micromenu.Menu("test", "this is a message", "and a bottom message")
+menu = micromenu.Menu("test", "this is a message", "and a bottom message", min_width=25)
 menu.add_function_item("item1", lambda x: print(x), {'x':"testparam"})
 menu.add_function_item("item2", lambda x: print(x), {'x':"testparam"}))
 menu.show()

@@ -4,23 +4,31 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.0.3"
+__version__ = "1.1.0"
 __license__ = "MIT"
 
 import sys
 
 PADDING = 2
-MIN_WIDTH = 52
+MIN_WIDTH = 32
+DELIMITER = ":"
+TITLE_INDENT = 3
 
 
 class Menu:
-    def __init__(self, menu_title, message_top="", message_bottom="", cycle=True):
+    def __init__(
+        self,
+        menu_title,
+        message_top="",
+        message_bottom="",
+        min_width=MIN_WIDTH,
+        cycle=True,
+    ):
         if not menu_title:
             raise ValueError("Menu title required")
 
         self.cycle = cycle
-        self.PADDING = PADDING
-        self.MIN_WIDTH = MIN_WIDTH
+        self.min_width = min_width
         self.menu_title = menu_title
         self.message_top = message_top
         self.message_bottom = message_bottom
@@ -53,49 +61,61 @@ class Menu:
             else:
                 print("Choose a valid item.")
 
-    def get_menu_width(self):
-        lengths = [len(item[0]) for item in self.menu_items]
-        lengths.append(len(self.menu_title))
+    def get_total_menu_width(self):
+        lengths = [
+            len((f"{str(ind)}{DELIMITER} {item[0]}"))
+            for ind, item in enumerate(self.menu_items)
+        ]
+        lengths.append(TITLE_INDENT + len(self.menu_title))
 
         if self.message_top:
             lengths.append(len(self.message_top))
         if self.message_bottom:
             lengths.append(len(self.message_bottom))
 
-        return max(self.PADDING + max(lengths), self.MIN_WIDTH)
+        # +4 for border and padding
+        return max(max(lengths) + 4, self.min_width)
 
     def print_menu(self):
 
-        menu_width = self.get_menu_width()
+        total_menu_width = self.get_total_menu_width()
 
-        menu_top_right = (menu_width - len(self.menu_title) - 1) * "─" + "╮"
-        menu_top = f"╭─── {self.menu_title} {menu_top_right}"
+        menu_top_left = f"╭{TITLE_INDENT*'─'} {self.menu_title} "
+        menu_top_right = "╮"
+        menu_top_padding = (
+            total_menu_width - len(menu_top_left) - len(menu_top_right)
+        ) * "─"
+        menu_top = f"{menu_top_left}{menu_top_padding}{menu_top_right}"
         print(menu_top)
 
+        # Top message
+
         if self.message_top:
-            menu_message_top_right = (
-                menu_width - len(self.message_top) + 2
-            ) * " " + "│"
-            menu_message_top = f"│ {self.message_top} {menu_message_top_right}"
-            print(menu_message_top)
-            print("╞" + (menu_width + 4) * "═" + "╡")
+            print(self.menu_item_string(self.message_top, total_menu_width))
+            print("╞" + (total_menu_width - 2) * "═" + "╡")
+
+        # Menu items
 
         index = 1
         for item in self.menu_items:
-            print(
-                "│ {}: {}{}│".format(
-                    str(index), item[0], (menu_width - len(item[0])) * " "
-                )
-            )
+            print(self.menu_item_string(item[0], total_menu_width, index))
             index += 1
-        print("│ 0: Exit" + (len(menu_top) - 10) * " " + "│")
+
+        print(self.menu_item_string("Exit", total_menu_width, 0))
+
+        # Bottom message
 
         if self.message_bottom:
-            print("├" + (menu_width + 4) * "─" + "┤")
-            menu_message_bottom_right = (
-                menu_width - len(self.message_bottom) + 2
-            ) * " " + "│"
-            menu_message_bottom = f"│ {self.message_bottom} {menu_message_bottom_right}"
-            print(menu_message_bottom)
+            print("├" + (total_menu_width - 2) * "─" + "┤")
+            print(self.menu_item_string(self.message_bottom, total_menu_width))
 
-        print("╰" + (len(menu_top) - 2) * "─" + "╯")
+        print("╰" + (total_menu_width - 2) * "─" + "╯")
+
+    def menu_item_string(self, title, total_menu_width, item_no=None):
+        index = ""
+        if isinstance(item_no, int):
+            index = f"{str(item_no)}{DELIMITER} "
+        string_left = f"│ {index}{title} "
+        string_right = f"│"
+        padding_length = total_menu_width - len(string_left) - len(string_right)
+        return f"{string_left}{padding_length * ' '}{string_right}"
