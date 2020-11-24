@@ -7,7 +7,7 @@ from io import StringIO
 
 from micromenu import micromenu
 
-# pytest --cov=micromenu --cov-report xml:cov.xml tests/
+# pytest --cov=micromenu --cov-report xml:coverage.xml tests/
 # pytest --cov=micromenu tests/
 
 
