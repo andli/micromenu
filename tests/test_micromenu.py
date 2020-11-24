@@ -65,15 +65,23 @@ class TestMenu:
         assert all(len(x) == len(lines[0]) for x in lines)
 
         # test menu item longest
-        menu = micromenu.Menu("x", "x")
-        menu.add_function_item(
-            "X" * (micromenu.MIN_WIDTH + overflow), lambda x: len(x), {"x": "testparam"}
-        )
-        menu.print_menu()
-        captured = capsys.readouterr()
-        lines = captured.out.split("\n")
-        del lines[-1]
-        assert all(len(x) == len(lines[0]) for x in lines)
+        def test_item_indexes(num_menu_items):
+            menu = micromenu.Menu("x", "x")
+            for i in range(num_menu_items):
+                menu.add_function_item(
+                    "X" * (micromenu.MIN_WIDTH + overflow),
+                    lambda x: len(x),
+                    {"x": "testparam"},
+                )
+            menu.print_menu()
+            captured = capsys.readouterr()
+            lines = captured.out.split("\n")
+            del lines[-1]
+            assert all(len(x) == len(lines[0]) for x in lines)
+
+        test_item_indexes(9)
+        test_item_indexes(10)
+        test_item_indexes(11)
 
     def test_invalid_input(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")

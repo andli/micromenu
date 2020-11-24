@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __license__ = "MIT"
 
 import sys
@@ -63,7 +63,7 @@ class Menu:
 
     def get_total_menu_width(self):
         lengths = [
-            len((f"{str(ind)}{DELIMITER} {item[0]}"))
+            len((f"{str(ind+1)}{DELIMITER} {item[0]}"))
             for ind, item in enumerate(self.menu_items)
         ]
         lengths.append(TITLE_INDENT + len(self.menu_title))
