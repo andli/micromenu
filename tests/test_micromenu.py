@@ -20,6 +20,21 @@ class TestMenu:
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
         assert len(menu.menu_items) == 1
 
+    def test_add_message_bottom_item_no_init(self):
+        menu = micromenu.Menu("test", "test messsage top", min_width=20)
+        assert len(menu.menu_items) == 0
+        menu.add_message_bottom_row("test message bottom")
+        assert len(menu.message_bottom) == 1
+
+    def test_add_message_bottom_item_with_init(self):
+        menu = micromenu.Menu(
+            "test", "test messsage top", "test message bottom", min_width=20
+        )
+        assert len(menu.menu_items) == 0
+        menu.add_message_bottom_row("test message bottom 2")
+        menu.add_message_bottom_row("test message bottom 3")
+        assert len(menu.message_bottom) == 3
+
     def test_print_menu(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
@@ -58,6 +73,7 @@ class TestMenu:
         # test bottom menu message longest
         menu = micromenu.Menu("x", "", "X" * (micromenu.MIN_WIDTH + overflow))
         menu.add_function_item("x", lambda x: len(x), {"x": "testparam"})
+        menu.add_message_bottom_row("notlongest")
         menu.print_menu()
         captured = capsys.readouterr()
         lines = captured.out.split("\n")

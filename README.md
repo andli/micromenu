@@ -13,7 +13,8 @@ A minimalistic command line menu for Python, with a title and optional message b
 │ 3: Menu item 3                                         │
 │ 0: Exit                                                │
 ├────────────────────────────────────────────────────────┤
-│ Bottom message                                         │
+│ Bottom message row 1                                   │
+│ Bottom message row 2                                   │
 ╰────────────────────────────────────────────────────────╯
 Action number:
 ```
@@ -34,5 +35,6 @@ import micromenu
 menu = micromenu.Menu("test", "this is a message", "and a bottom message", min_width=25)
 menu.add_function_item("item1", lambda x: print(x), {'x':"testparam"})
 menu.add_function_item("item2", lambda x: print(x), {'x':"testparam"}))
+menu.add_message_bottom_row("bottom msg")
 menu.show()
 ```
