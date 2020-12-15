@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 __license__ = "MIT"
 
 import sys
@@ -36,6 +36,9 @@ class Menu:
 
     def add_function_item(self, item_title, func_ref, kwargs):
         self.menu_items.append((item_title, func_ref, kwargs))
+
+    def add_divider(self):
+        self.menu_items.append(("-", None))
 
     def add_message_bottom_row(self, message):
         self.message_bottom.append(message)
@@ -101,7 +104,10 @@ class Menu:
 
         index = 1
         for item in self.menu_items:
-            print(self.menu_item_string(item[0], total_menu_width, index))
+            if item[0] == "-" and item[1] == None:
+                print("├" + (total_menu_width - 2) * "─" + "┤")
+            else:
+                print(self.menu_item_string(item[0], total_menu_width, index))
             index += 1
 
         print(self.menu_item_string("Exit", total_menu_width, 0))

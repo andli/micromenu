@@ -20,6 +20,16 @@ class TestMenu:
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
         assert len(menu.menu_items) == 1
 
+    def test_add_divider(self):
+        menu = micromenu.Menu(
+            "test", "test messsage top", "test message bottom", min_width=20
+        )
+        assert len(menu.menu_items) == 0
+        menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
+        menu.add_divider()
+        menu.add_function_item("title2", lambda x: len(x), {"x": "testparam"})
+        assert len(menu.menu_items) == 3
+
     def test_add_message_bottom_item_no_init(self):
         menu = micromenu.Menu("test", "test messsage top", min_width=20)
         assert len(menu.menu_items) == 0
@@ -38,6 +48,8 @@ class TestMenu:
     def test_print_menu(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
+        menu.add_divider()
+        menu.add_function_item("title2", lambda x: len(x), {"x": "testparam"})
         menu.print_menu()
         captured = capsys.readouterr()
         assert captured.out.startswith("╭─── test ")
