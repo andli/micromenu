@@ -114,7 +114,9 @@ class Menu:
                     for menu_item in self.get_menu_items():
                         if menu_item.index == choice:
                             menu_item.execute()
-                            break
+                            if self.cycle:
+                                self.show()
+                            return False
                 else:
                     print("Invalid number, please try again.")
 
@@ -123,6 +125,9 @@ class Menu:
                 for menu_item in self.get_menu_items():
                     if menu_item.uid == choice:
                         menu_item.execute()
+                        if self.cycle:
+                            self.show()
+                        return False
 
     def get_total_menu_width(self):
         lengths = [
