@@ -22,7 +22,7 @@ class MenuItem:
         self.func_ref = func_ref
         self.kwargs = kwargs
         self.index = index
-        self.uid = uid
+        self.uid = uid  # TODO: minimum length and uniqueness check
 
     def render(self, width):
         string_left = f"│ {str(self.index)}{DELIMITER} {self.item_title} "
