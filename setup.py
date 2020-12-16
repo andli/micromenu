@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="micromenu",
-    version="2.0.0",
+    version="2.0.1",
     py_modules=["micromenu"],
     author="Andreas Ehrlund",
     author_email="a.ehrlund@gmail.com",
