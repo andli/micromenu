@@ -4,15 +4,64 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "1.3.0"
+__version__ = "2.0.0"
 __license__ = "MIT"
 
 import sys
+from typing import Text
 
 PADDING = 2
 MIN_WIDTH = 32
 DELIMITER = ":"
 TITLE_INDENT = 3
+
+
+class MenuItem:
+    def __init__(self, item_title, func_ref, kwargs, index, uid=None):
+        self.item_title = item_title
+        self.func_ref = func_ref
+        self.kwargs = kwargs
+        self.index = index
+        self.uid = uid
+
+    def render(self, width):
+        string_left = f"│ {str(self.index)}{DELIMITER} {self.item_title} "
+        string_right = f"│"
+        padding_length = width - len(string_left) - len(string_right)
+        print(f"{string_left}{padding_length * ' '}{string_right}")
+
+    def get_length(self):
+        return len((f"{str(self.index+1)}{DELIMITER} {self.item_title}"))
+
+    def execute(self):
+        func = self.func_ref
+        kwargs = self.kwargs
+        func(**kwargs)
+
+
+class TextItem:
+    def __init__(self, text):
+        self.text = text
+
+    def get_length(self):
+        return len(self.text)
+
+    def render(self, width):
+        string_left = f"│ {self.text} "
+        string_right = f"│"
+        padding_length = width - len(string_left) - len(string_right)
+        print(f"{string_left}{padding_length * ' '}{string_right}")
+
+
+class Divider:
+    def __init__(self):
+        pass
+
+    def render(self, width, type="single"):
+        if type == "double":
+            print("╞" + (width - 2) * "═" + "╡")
+        else:
+            print("├" + (width - 2) * "─" + "┤")
 
 
 class Menu:
@@ -24,60 +73,69 @@ class Menu:
         min_width=MIN_WIDTH,
         cycle=True,
     ):
-        if not menu_title:
-            raise ValueError("Menu title required")
-
         self.cycle = cycle
         self.min_width = min_width
         self.menu_title = menu_title
-        self.message_top = message_top
+        self.message_top = TextItem(message_top)
         self.menu_items = []
-        self.message_bottom = [message_bottom] if message_bottom else []
+        self.message_bottom = [TextItem(message_bottom)] if message_bottom else []
 
-    def add_function_item(self, item_title, func_ref, kwargs):
-        self.menu_items.append((item_title, func_ref, kwargs))
+    def get_menu_items(self):
+        return [x for x in self.menu_items if isinstance(x, MenuItem)]
+
+    def add_function_item(self, item_title, func_ref, kwargs, uid=None):
+        item_count = len(self.get_menu_items())
+        self.menu_items.append(
+            MenuItem(item_title, func_ref, kwargs, item_count + 1, uid)
+        )
 
     def add_divider(self):
-        self.menu_items.append(("-", None))
+        self.menu_items.append(Divider())
 
     def add_message_bottom_row(self, message):
-        self.message_bottom.append(message)
+        self.message_bottom.append(TextItem(message))
 
     def show(self):
         self.print_menu()
 
         while True:
+            choice = input("Action: ")
             try:
-                choice = int(input("Action number: "))
-            except ValueError:
-                print("Incorrect input, try again.")
-                continue
+                choice = int(choice)
+            except:
+                pass
 
-            if 0 == choice:
-                return True
-                # yield
-            elif choice in range(len(self.menu_items) + 1):
-                func = self.menu_items[choice - 1][1]
-                kwargs = self.menu_items[choice - 1][2]
-                func(**kwargs)
-                if self.cycle:
-                    self.show()
-                return False
+            if isinstance(choice, int):
+                choice = int(choice)
+                if 0 == choice:
+                    return True
+                    # yield
+                elif choice in range(len(self.get_menu_items()) + 1):
+                    for menu_item in self.get_menu_items():
+                        if menu_item.index == choice:
+                            menu_item.execute()
+                            break
+                else:
+                    print("Invalid number, please try again.")
 
-            else:
-                print("Choose a valid item.")
+            elif isinstance(choice, str):
+                choice = str(choice)
+                for menu_item in self.get_menu_items():
+                    if menu_item.uid == choice:
+                        menu_item.execute()
 
     def get_total_menu_width(self):
         lengths = [
-            len((f"{str(ind+1)}{DELIMITER} {item[0]}"))
+            item.get_length()
             for ind, item in enumerate(self.menu_items)
+            if isinstance(item, MenuItem)
         ]
         lengths.append(TITLE_INDENT + len(self.menu_title))
 
         if self.message_top:
-            lengths.append(len(self.message_top))
+            lengths.append(self.message_top.get_length())
         if self.message_bottom:
-            lengths.append(len(max(self.message_bottom, key=len)))
+            lengths.append(max([x.get_length() for x in self.message_bottom]))
 
         # +4 for border and padding
         return max(max(lengths) + 4, self.min_width)
@@ -97,35 +155,27 @@ class Menu:
         # Top message
 
         if self.message_top:
-            print(self.menu_item_string(self.message_top, total_menu_width))
-            print("╞" + (total_menu_width - 2) * "═" + "╡")
+            self.message_top.render(total_menu_width)
+            top_divider = Divider()
+            top_divider.render(total_menu_width, type="double")
 
         # Menu items
 
-        index = 1
         for item in self.menu_items:
-            if item[0] == "-" and item[1] == None:
-                print("├" + (total_menu_width - 2) * "─" + "┤")
-            else:
-                print(self.menu_item_string(item[0], total_menu_width, index))
-            index += 1
+            if isinstance(item, Divider):
+                item.render(total_menu_width)
+            if isinstance(item, MenuItem):
+                item.render(total_menu_width)
 
-        print(self.menu_item_string("Exit", total_menu_width, 0))
+        exit_item = TextItem(f"0{DELIMITER} Exit")
+        exit_item.render(total_menu_width)
 
         # Bottom message
 
         if self.message_bottom:
             print("├" + (total_menu_width - 2) * "─" + "┤")
             for message in self.message_bottom:
-                print(self.menu_item_string(message, total_menu_width))
+                message.render(total_menu_width)
 
         print("╰" + (total_menu_width - 2) * "─" + "╯")
 
-    def menu_item_string(self, title, total_menu_width, item_no=None):
-        index = ""
-        if isinstance(item_no, int):
-            index = f"{str(item_no)}{DELIMITER} "
-        string_left = f"│ {index}{title} "
-        string_right = f"│"
-        padding_length = total_menu_width - len(string_left) - len(string_right)
-        return f"{string_left}{padding_length * ' '}{string_right}"

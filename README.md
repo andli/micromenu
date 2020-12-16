@@ -22,6 +22,8 @@ Action number:
 
 Set the parameter `cycle=False` if the menu should not loop back after an item has been executed. `menu.show()` will return `True` after terminating.
 
+`add_function_item` has an optional parameter `uid` which can be used to address the menu options without using the index numbers.
+
 ## Installation
 
 ```bash

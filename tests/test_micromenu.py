@@ -55,9 +55,6 @@ class TestMenu:
         assert captured.out.startswith("╭─── test ")
 
     def test_inputs(self):
-        with pytest.raises(ValueError) as excinfo:
-            menu = micromenu.Menu("")
-
         menu = micromenu.Menu("test_title", "")
         assert isinstance(menu, micromenu.Menu)
 
@@ -111,14 +108,16 @@ class TestMenu:
         test_item_indexes(10)
         test_item_indexes(11)
 
-    def test_invalid_input(self, capsys):
+    def test_string_uid_input(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
-        menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
+        menu.add_function_item(
+            "title1", lambda x: print(x), {"x": "testparam"}, uid="xxx"
+        )
 
-        with patch("sys.stdin", StringIO("a\n0")):
+        with patch("sys.stdin", StringIO("xxx\n0\n")):
             menu.show()
-        captured = capsys.readouterr()
-        assert "Incorrect input, try again." in captured.out
+            captured = capsys.readouterr()
+            assert "testparam" in captured.out
 
     def test_menu_item_out_of_range(self, capsys):
         menu = micromenu.Menu("test", "test messsage top", "test message bottom")
@@ -126,8 +125,8 @@ class TestMenu:
 
         with patch("sys.stdin", StringIO("9\n0")):
             menu.show()
-        captured = capsys.readouterr()
-        assert "Choose a valid item." in captured.out
+            captured = capsys.readouterr()
+            assert "Invalid number, please try again." in captured.out
 
     def test_menu_item_function_called(self, capsys):
         dummy = MagicMock()
