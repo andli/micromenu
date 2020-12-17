@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 __license__ = "MIT"
 
 import sys
@@ -76,7 +76,7 @@ class Menu:
         self.cycle = cycle
         self.min_width = min_width
         self.menu_title = menu_title
-        self.message_top = TextItem(message_top)
+        self.message_top = TextItem(message_top) if message_top else None
         self.menu_items = []
         self.message_bottom = [TextItem(message_bottom)] if message_bottom else []
 
