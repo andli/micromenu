@@ -4,7 +4,7 @@ A very lightweight console menu.
 """
 
 __author__ = "Andreas Ehrlund"
-__version__ = "2.0.1"
+__version__ = "2.0.2"
 __license__ = "MIT"
 
 import sys
@@ -159,7 +159,7 @@ class Menu:
 
         # Top message
 
-        if self.message_top:
+        if self.message_top and self.message_top.text != "":
             self.message_top.render(total_menu_width)
             top_divider = Divider()
             top_divider.render(total_menu_width, type="double")
