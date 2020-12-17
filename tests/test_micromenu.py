@@ -1,9 +1,7 @@
-import pytest
-import mock
-import builtins
-from unittest.mock import patch
-from unittest.mock import MagicMock
+import re
+
 from io import StringIO
+from unittest.mock import MagicMock, patch
 
 from micromenu import micromenu
 
@@ -41,11 +39,13 @@ class TestMenu:
     def test_no_bottom_message(self, capsys):
         menu = micromenu.Menu("test")
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
+        # menu.add_message_bottom_row("hej")
         assert len(menu.menu_items) == 1
         menu.print_menu()
         captured = capsys.readouterr()
         # check for not having a divider right before the exit option
-        assert " │\n│ 0: Exit" in captured.out
+        r = re.search(r"├", captured.out)
+        assert r == None
 
     def test_add_message_bottom_item_no_init(self):
         menu = micromenu.Menu("test", "test messsage top", min_width=20)
