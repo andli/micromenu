@@ -34,7 +34,7 @@ class TestMenu:
         assert len(menu.menu_items) == 1
         menu.print_menu()
         captured = capsys.readouterr()
-        assert "═" not in captured.out
+        assert "╞" not in captured.out
 
     def test_no_bottom_message(self, capsys):
         menu = micromenu.Menu("test")
