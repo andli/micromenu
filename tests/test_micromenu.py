@@ -30,13 +30,22 @@ class TestMenu:
         menu.add_function_item("title2", lambda x: len(x), {"x": "testparam"})
         assert len(menu.menu_items) == 3
 
-    def test_no_top_divider(self, capsys):
+    def test_no_top_message(self, capsys):
         menu = micromenu.Menu("test")
         menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
         assert len(menu.menu_items) == 1
         menu.print_menu()
         captured = capsys.readouterr()
         assert "═" not in captured.out
+
+    def test_no_bottom_message(self, capsys):
+        menu = micromenu.Menu("test")
+        menu.add_function_item("title1", lambda x: len(x), {"x": "testparam"})
+        assert len(menu.menu_items) == 1
+        menu.print_menu()
+        captured = capsys.readouterr()
+        # check for not having a divider right before the exit option
+        assert " │\n│ 0: Exit" in captured.out
 
     def test_add_message_bottom_item_no_init(self):
         menu = micromenu.Menu("test", "test messsage top", min_width=20)
